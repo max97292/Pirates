@@ -1,15 +1,42 @@
 # -*- coding: utf-8 -*-
 import time
+import random
 
 import telebot
+import sqlite3
+import emoji
+
 from telebot import types
-from config import TOKEN
+from src.config import TOKEN
+
+from src.start_island import *
 
 bot = telebot.TeleBot(TOKEN)
 
+conn = sqlite3.connect("DataBase.db", check_same_thread=False)
+cursor = conn.cursor()
+
+def deemojify(string):
+    string = emoji.demojize(string)
+    if ':' in string:
+        text_s = string.index(':')
+        text_f = string.rindex(':')
+        text_c = string[text_s:text_f + 1]
+        string = string[:text_s] + string[text_f + 1:len(string)]
+        string = string.strip()
+        return str(string)
+    else:
+        return string
+
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Hello')
+    registration(message)
+
+@bot.message_handler(content_types=['text'])
+def text_content(message):
+    if deemojify(message.text.lower()) == 'осмотреться':
+        time.sleep(3)
+        look_around(message)
 
 while True:
     try:
