@@ -50,11 +50,15 @@ def registration(message):
         player_class = random.randint(0, 5)
         PLAYER.append(player_class)
         PLAYER.append(0)
-        player_race = random.randint(0, 3)
+        player_race = random.randint(1, 3)
         PLAYER.append(player_race)
 
-        for i in range(2, 8):
-            STATUS.append(0)
+        STATUS.append(1)
+        STATUS.append(0)
+        STATUS.append(1000)
+        STATUS.append(100)
+        STATUS.append(50)
+        STATUS.append(100)
         STATUS.append('start_island')
         for i in range(1, 4):
             EQUIPMENT.append(0)

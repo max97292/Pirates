@@ -4,6 +4,7 @@ import emoji
 
 from src.colony.colony import *
 from src.colony.edge.store import *
+from src.person import *
 from src.start_island import *
 
 bot = telebot.TeleBot(TOKEN)
@@ -43,6 +44,8 @@ def text_content(message):
     if deemojify(message.text.lower()) == 'осмотреться':
         #time.sleep(3)
         look_around(message)
+    if deemojify(message.text.lower()) == 'персонаж':
+        person_show_characteristics(message)
     if deemojify(message.text.lower()) == 'поселение':
         #time.sleep(3)
         colony_start(message)
