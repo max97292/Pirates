@@ -27,8 +27,12 @@ def registration(message):
     STATUS = []
     EQUIPMENT = []
 
-    cursor.execute('select * from players where id=?', [message.from_user.id])
-    player = cursor.fetchone()
+    try:
+        cursor.execute('select * from players where id=?', [message.from_user.id])
+        player = cursor.fetchone()
+    except Exception as e:
+        print(e)
+
     if player == None:
         PLAYER.append(message.from_user.id)
         STATUS.append(message.from_user.id)
@@ -51,13 +55,14 @@ def registration(message):
 
         for i in range(2, 8):
             STATUS.append(0)
+        STATUS.append('start_island')
         for i in range(1, 4):
             EQUIPMENT.append(0)
 
         try:
             cursor.execute('insert into players values (?,?,?,?,?)', PLAYER)
             conn.commit()
-            cursor.execute('insert into status values (?,?,?,?,?,?,?,?)', STATUS)
+            cursor.execute('insert into status values (?,?,?,?,?,?,?,?,?)', STATUS)
             conn.commit()
             cursor.execute('insert into equipment values (?,?,?,?)', EQUIPMENT)
             conn.commit()
@@ -68,4 +73,10 @@ def registration(message):
         bot.send_message(CHAT, 'Привет еще раз')
 
 def look_around(message):
+    try:
+        cursor.execute('update status set location=? where id_player=?', ['start_island', message.from_user.id])
+        conn.commit()
+    except Exception as e:
+        print(e)
+
     bot.send_message(message.chat.id, 'Ты осмотрелся и увидел 3 направления', reply_markup=kb_directions)

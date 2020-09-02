@@ -36,23 +36,32 @@ def start_message(message):
 
 @bot.message_handler(content_types=['text'])
 def text_content(message):
+    try:
+        cursor.execute('select * from status where id_player=?', [message.from_user.id])
+        player = cursor.fetchone()
+    except Exception as e:
+        print(e)
+
+    if deemojify(message.text.lower()) == 'назад':
+        if (player[8]) == 'colony':
+            look_around(message)
     if deemojify(message.text.lower()) == 'осмотреться':
-        time.sleep(3)
+        #time.sleep(3)
         look_around(message)
-
     if deemojify(message.text.lower()) == 'поселение':
-        time.sleep(3)
+        #time.sleep(3)
         colony_start(message)
-
-    if(deemojify(message.text.lower())) == 'окраина':
-        time.sleep(3)
+    if deemojify(message.text.lower()) == 'окраина':
+        #time.sleep(3)
         colony_edge(message)
-    if(deemojify(message.text.lower())) == 'центр':
-        time.sleep(3)
+    if deemojify(message.text.lower()) == 'центр':
+        #time.sleep(3)
         colony_center(message)
-    if(deemojify(message.text.lower())) == 'причал':
-        time.sleep(3)
+    if deemojify(message.text.lower()) == 'причал':
+        #time.sleep(3)
         colony_pier(message)
+    if deemojify(message.text.lower()) =='вернуться в поселение':
+        colony_start(message)
 
 while True:
     try:
