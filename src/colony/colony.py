@@ -33,6 +33,7 @@ def colony_start(message):
         cursor.execute('update status set location=? where id_player=?', ['colony', message.from_user.id])
         conn.commit()
     except Exception as e:
+        print(1)
         print(e)
     bot.send_message(message.chat.id, 'Добро пожаловать в Поселение', reply_markup=kb_colony)
 
