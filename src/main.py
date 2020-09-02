@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
-import time
-import random
 
-import telebot
-import sqlite3
 import emoji
 
-from telebot import types
-
-from src.config import TOKEN
-
-from src.colony import *
+from src.colony.colony import *
+from src.colony.edge.store import *
 from src.start_island import *
 
 bot = telebot.TeleBot(TOKEN)
@@ -43,8 +36,10 @@ def text_content(message):
         print(e)
 
     if deemojify(message.text.lower()) == 'назад':
-        if (player[8]) == 'colony':
+        if player[8] == 'colony':
             look_around(message)
+        if player[8] == 'colony_edge_store':
+            colony_edge(message)
     if deemojify(message.text.lower()) == 'осмотреться':
         #time.sleep(3)
         look_around(message)
@@ -54,6 +49,9 @@ def text_content(message):
     if deemojify(message.text.lower()) == 'окраина':
         #time.sleep(3)
         colony_edge(message)
+    if deemojify(message.text.lower()) == '︎ странная лавка':
+        # time.sleep(3)
+        store_welcome(message)
     if deemojify(message.text.lower()) == 'центр':
         #time.sleep(3)
         colony_center(message)
