@@ -19,15 +19,26 @@ def person_show_characteristics(message):
         player = cursor.fetchone()
         cursor.execute('select * from status where id_player=?', [message.from_user.id])
         status = cursor.fetchone()
+        cursor.execute('select name from player_class')
+        classes = cursor.fetchall()
     except Exception as e:
         print(e)
 
+    if player[2] == 1:
+        player_class = classes[0][0]
+    if player[2] == 2:
+        player_class = classes[1][0]
+    if player[2] == 3:
+        player_class = classes[2][0]
+    if player[2] == 4:
+        player_class = classes[3][0]
+
     if player[4] == 1:
-        player_class = '🧔🏼'
+        player_race = '🧔🏼'
     if player[4] == 2:
-        player_class = '🧔'
+        player_race = '🧔'
     if player[4] == 3:
-        player_class = '🧔🏿'
+        player_race = '🧔🏿'
 
     bot.send_message(message.chat.id, '🏴‍☠ Пират %s\n'
                                       'Класс %s\n'
@@ -43,8 +54,8 @@ def person_show_characteristics(message):
                                       '🥄 Голод: %d/%d\n'
                                       '\n'
                                       'Экипировка:\n'
-                                      '' % (player_class ,
-                                            player[2] ,
+                                      '' % (player_race ,
+                                            str(player_class) ,
                                             player[3] ,
                                             status[1] ,
                                             status[2] ,

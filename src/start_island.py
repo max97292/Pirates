@@ -47,17 +47,24 @@ def registration(message):
             PLAYER.append(message.from_user.first_name)
             STATUS.append(message.from_user.first_name)
 
-        player_class = random.randint(0, 5)
+        player_class = random.randint(1, 4)
         PLAYER.append(player_class)
         PLAYER.append(0)
         player_race = random.randint(1, 3)
         PLAYER.append(player_race)
 
+        try:
+            cursor.execute('select coeff from player_class where id=?', [player_class])
+            player_coeff = cursor.fetchone()
+            player_coeff = player_coeff[0]
+        except Exception as e:
+            print(e)
+
         STATUS.append(1)
         STATUS.append(0)
-        STATUS.append(1000)
-        STATUS.append(100)
-        STATUS.append(50)
+        STATUS.append(1000*player_coeff)
+        STATUS.append(100*player_coeff)
+        STATUS.append(50*player_coeff)
         STATUS.append(100)
         STATUS.append('start_island')
         for i in range(1, 4):

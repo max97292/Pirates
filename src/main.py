@@ -28,6 +28,19 @@ def deemojify(string):
 def start_message(message):
     registration(message)
 
+@bot.message_handler(commands=['clear'])
+def clear_player(message):
+    try:
+        cursor.execute("DELETE FROM equipment WHERE id_player=?", [message.from_user.id])
+        conn.commit()
+        cursor.execute("DELETE FROM players WHERE id=?", [message.from_user.id])
+        conn.commit()
+        cursor.execute("DELETE FROM status WHERE id_player=?", [message.from_user.id])
+        conn.commit()
+        bot.send_message(message.chat.id, 'Твой профиль удален из базы')
+    except Exception as e:
+        print(e)
+
 @bot.message_handler(content_types=['text'])
 def text_content(message):
     try:
