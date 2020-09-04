@@ -24,20 +24,19 @@ kb_colony.row('🏠 Окраина', '🏙 Центр', '⚓ Причал')
 kb_colony.row('⬅ Назад')
 kb_colony_edge.row('Персонаж')
 kb_colony_edge.row('🛍︎ Странная лавка', '🏚 Злачный переулок', '🌿 Лавка травника')
-kb_colony_edge.row('⬅ Вернуться в поселение')
+kb_colony_edge.row('⬅ Вернуться на площадь')
 kb_colony_center.row('Персонаж')
 kb_colony_center.row('⛪ Ратуша', '💰 Рынок', '🍺 Кабак')
-kb_colony_center.row('⬅ Вернуться в поселение')
+kb_colony_center.row('⬅ Вернуться на площадь')
 kb_colony_pier.row('Персонаж')
 kb_colony_pier.row('🗼 Маяк', '⚒ Кузня', '🍻 Бар')
-kb_colony_pier.row('⬅ Вернуться в поселение')
+kb_colony_pier.row('⬅ Вернуться на площадь')
 
 def colony_start(message):
     try:
         cursor.execute('update status set location=? where id_player=?', ['colony', message.from_user.id])
         conn.commit()
     except Exception as e:
-        print(1)
         print(e)
     bot.send_message(message.chat.id, 'Добро пожаловать в Поселение', reply_markup=kb_colony)
 

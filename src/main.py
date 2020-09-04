@@ -4,6 +4,8 @@ import emoji
 
 from src.colony.colony import *
 from src.colony.edge.store import *
+from src.forest.forest import *
+from src.beach.beach import *
 from src.person import *
 from src.start_island import *
 
@@ -50,10 +52,16 @@ def text_content(message):
         print(e)
 
     if deemojify(message.text.lower()) == 'назад':
+        if player[8] == 'beach':
+            look_around(message)
+        if player[8].startswith('forest'):
+            look_around(message)
         if player[8] == 'colony':
             look_around(message)
         if player[8] == 'colony_edge_store':
             colony_edge(message)
+        #if player[8] == 'forest_big':
+
     if deemojify(message.text.lower()) == 'осмотреться':
         #time.sleep(3)
         look_around(message)
@@ -74,8 +82,14 @@ def text_content(message):
     if deemojify(message.text.lower()) == 'причал':
         #time.sleep(3)
         colony_pier(message)
-    if deemojify(message.text.lower()) =='вернуться в поселение':
+    if deemojify(message.text.lower()) == 'вернуться на площадь':
         colony_start(message)
+    if deemojify(message.text.lower()) == 'лес' or deemojify(message.text.lower()) == 'свернуть в лес':
+        forest_start(message)
+    if deemojify(message.text.lower()) == 'пляж':
+        beach_start(message)
+    if deemojify(message.text.lower()) == 'двигаться дальше':
+        forest_forward(message)
 
 while True:
     try:
