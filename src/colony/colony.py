@@ -32,6 +32,7 @@ kb_colony_pier.row('Персонаж')
 kb_colony_pier.row('🗼 Маяк', '⚒ Кузня', '🍻 Бар')
 kb_colony_pier.row('⬅ Вернуться на площадь')
 
+
 def colony_start(message):
     try:
         cursor.execute('update status set location=? where id_player=?', ['colony', message.from_user.id])

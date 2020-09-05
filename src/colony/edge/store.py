@@ -17,6 +17,7 @@ kb_welcome = types.ReplyKeyboardMarkup(True, False)
 
 kb_welcome.row('Назад')
 
+
 def store_welcome(message):
     try:
         cursor.execute('update status set location=? where id_player=?', ['colony_edge_store', message.from_user.id])

@@ -21,6 +21,7 @@ kb_hide = types.ReplyKeyboardRemove()
 kb_start.row('Осмотреться 👀')
 kb_directions.row('🏘 Поселение', '🌳 Лес', '🏝 Пляж')
 
+
 def registration(message):
     CHAT = message.chat.id
     PLAYER = []
@@ -62,9 +63,9 @@ def registration(message):
 
         STATUS.append(1)
         STATUS.append(0)
-        STATUS.append(1000*player_coeff)
-        STATUS.append(100*player_coeff)
-        STATUS.append(50*player_coeff)
+        STATUS.append(1000 * player_coeff)
+        STATUS.append(100 * player_coeff)
+        STATUS.append(50 * player_coeff)
         STATUS.append(100)
         STATUS.append('start_island')
         for i in range(1, 4):
@@ -82,6 +83,7 @@ def registration(message):
 
     else:
         bot.send_message(CHAT, 'Привет еще раз')
+
 
 def look_around(message):
     try:

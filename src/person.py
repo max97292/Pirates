@@ -13,6 +13,7 @@ bot = telebot.TeleBot(TOKEN)
 conn = sqlite3.connect("DataBase.db", check_same_thread=False)
 cursor = conn.cursor()
 
+
 def person_show_characteristics(message):
     try:
         cursor.execute('select * from players where id=?', [message.from_user.id])
@@ -54,13 +55,13 @@ def person_show_characteristics(message):
                                       '🥄 Голод: %d/%d\n'
                                       '\n'
                                       'Экипировка:\n'
-                                      '' % (player_race ,
-                                            str(player_class) ,
-                                            player[3] ,
-                                            status[1] ,
-                                            status[2] ,
-                                            status[3] , status[3] ,
-                                            status[4] , status[4] ,
-                                            status[5] , status[5] ,
-                                            status[6] , status[6] ,
-                                            status[7] , status[7]))
+                                      '' % (player_race,
+                                            str(player_class),
+                                            player[3],
+                                            status[1],
+                                            status[2],
+                                            status[3], status[3],
+                                            status[4], status[4],
+                                            status[5], status[5],
+                                            status[6], status[6],
+                                            status[7], status[7]))
