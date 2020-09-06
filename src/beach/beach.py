@@ -17,7 +17,19 @@ cursor = conn.cursor()
 def beach_start(message):
     kb_beach = types.ReplyKeyboardMarkup(True, False)
 
-    kb_beach.row('🚶 Идти прямо', '🌳 Свернуть в лес')  # в зависимости от цвета кожи, разный эмодзи
+    try:
+        cursor.execute('select * from players where id=?', [message.from_user.id])
+        player = cursor.fetchone()
+    except Exception as e:
+        print(e)
+
+    if player[4] == 1:
+        kb_beach.row('🚶🏻 Идти прямо', '🌳 Свернуть в лес')
+    if player[4] == 2:
+        kb_beach.row('🚶🏼 Идти прямо', '🌳 Свернуть в лес')
+    if player[4] == 3:
+        kb_beach.row('🚶🏿 Идти прямо', '🌳 Свернуть в лес')
+
     kb_beach.row('⬅ Назад')
 
     try:
@@ -31,7 +43,19 @@ def beach_start(message):
 def beach_forward(message):
     kb_beach = types.ReplyKeyboardMarkup(True, False)
 
-    kb_beach.row('🚶 Идти прямо', '🌳 Свернуть в лес')  # в зависимости от цвета кожи, разный эмодзи
+    try:
+        cursor.execute('select * from players where id=?', [message.from_user.id])
+        player = cursor.fetchone()
+    except Exception as e:
+        print(e)
+
+    if player[4] == 1:
+        kb_beach.row('🚶🏼 Идти прямо', '🌳 Свернуть в лес')
+    if player[4] == 2:
+        kb_beach.row('🚶🏻 Идти прямо', '🌳 Свернуть в лес')
+    if player[4] == 3:
+        kb_beach.row('🚶🏿 Идти прямо', '🌳 Свернуть в лес')
+
     kb_beach.row('⬅ Назад')
 
     try:

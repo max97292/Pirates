@@ -70,14 +70,14 @@ def forest_backward(message):
         cursor.execute('select location from status where id_player=?', [message.from_user.id])
         location = cursor.fetchone()
         location = location[0]
-        if location == 'forest1':
+        if location == 'forest_big':
+            location = 'forest'
+        elif location == 'forest1':
             location = 'forest'
         elif location == 'forest2':
             location = 'forest1'
         elif location == 'forest3':
             location = 'forest2'
-        elif location == 'forest_big':
-            location = 'forest3'
         transition(message, 0)
         cursor.execute('update status set location=? where id_player=?', [location, message.from_user.id])
         conn.commit()

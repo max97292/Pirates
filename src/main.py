@@ -4,6 +4,7 @@ import emoji
 
 from src.colony.colony import *
 from src.colony.edge.store import *
+from src.enemys.enemys import *
 from src.forest.forest import *
 from src.beach.beach import *
 from src.person import *
@@ -33,6 +34,9 @@ def deemojify(string):
 def start_message(message):
     registration(message)
 
+@bot.message_handler(commands=['en'])
+def enemy(message):
+    select_enemys(message)
 
 @bot.message_handler(commands=['clear'])
 def clear_player(message):
@@ -42,6 +46,8 @@ def clear_player(message):
         cursor.execute("DELETE FROM players WHERE id=?", [message.from_user.id])
         conn.commit()
         cursor.execute("DELETE FROM status WHERE id_player=?", [message.from_user.id])
+        conn.commit()
+        cursor.execute("DELETE FROM enemy_status WHERE id_player=?", [message.from_user.id])
         conn.commit()
         bot.send_message(message.chat.id, 'Твой профиль удален из базы', reply_markup=types.ReplyKeyboardRemove())
     except Exception as e:
@@ -56,26 +62,30 @@ def text_content(message):
     except Exception as e:
         print(e)
 
-    if player[8] == 'transition':
+    if player[9] == 'transition':
         if deemojify(message.text.lower()) == 'персонаж':
             person_show_characteristics(message)
         else:
             bot.send_message(message.chat.id, 'Воу-воу полехче ты ж куда-то уже идёшь')
     else:
+        if deemojify(message.text.lower()) == 'атаковать':
+            attack_enemy(message)
+        if deemojify(message.text.lower()) == 'персонаж':
+            person_show_characteristics(message)
         if deemojify(message.text.lower()) == 'назад':
-            if player[8] == 'beach':
+            if player[9] == 'beach':
                 transition(message, 0)
                 look_around(message)
-            if player[8].startswith('forest'):
-                if player[8] == 'forest':
+            if player[9].startswith('forest'):
+                if player[9] == 'forest':
                     transition(message, 0)
                     look_around(message)
                 else:
                     forest_backward(message)
-            if player[8] == 'colony':
+            if player[9] == 'colony':
                 transition(message, 0)
                 look_around(message)
-            if player[8] == 'colony_edge_store':
+            if player[9] == 'colony_edge_store':
                 transition(message, 0)
                 colony_edge(message)
 

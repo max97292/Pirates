@@ -64,6 +64,7 @@ def registration(message):
         STATUS.append(1)
         STATUS.append(0)
         STATUS.append(1000 * player_coeff)
+        STATUS.append(1000 * player_coeff)
         STATUS.append(100 * player_coeff)
         STATUS.append(50 * player_coeff)
         STATUS.append(100)
@@ -74,9 +75,11 @@ def registration(message):
         try:
             cursor.execute('insert into players values (?,?,?,?,?)', PLAYER)
             conn.commit()
-            cursor.execute('insert into status values (?,?,?,?,?,?,?,?,?)', STATUS)
+            cursor.execute('insert into status values (?,?,?,?,?,?,?,?,?,?)', STATUS)
             conn.commit()
             cursor.execute('insert into equipment values (?,?,?,?)', EQUIPMENT)
+            conn.commit()
+            cursor.execute('insert into enemy_status values (?,?)', [message.from_user.id, 0])
             conn.commit()
         except Exception as e:
             print(e)

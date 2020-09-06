@@ -61,7 +61,7 @@ def person_show_characteristics(message):
                                             status[1],
                                             status[2],
                                             status[3], status[3],
-                                            status[4], status[4],
-                                            status[5], status[5],
+                                            status[4], status[5],
                                             status[6], status[6],
-                                            status[7], status[7]))
+                                            status[7], status[7],
+                                            status[8], status[8]))
