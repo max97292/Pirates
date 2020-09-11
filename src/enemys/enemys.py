@@ -88,4 +88,40 @@ def attack_enemy(message):
     except Exception as e:
         print(e)
 
-    #player_health
+    print(enemy_status)
+    print(status)
+    print(enemy)
+
+    player_health = status[4]
+    monster_health = enemy[2]
+
+    player_full_health = status[5]
+    monster_full_health = enemy[2]
+
+    player_power = status[6]
+    monster_power = enemy[3]
+
+    player_protection = status[7]
+    monster_protection = enemy[4]
+
+    monster_name = enemy[1]
+
+    monster_type = enemy[5]
+    monster_incoming = enemy[6]
+    monster_outgoing = list(str(enemy[7]))
+
+    message_out = 'Бой против %s \n\n' % (monster_name)
+
+    while True:
+        if player_health <= 0:
+            bot.send_message(message.chat.id, message_out)# + '\n❤0/%d\n') % [player_full_health[0] ]
+            break
+
+    step = random.randint(0,1)
+    if step == 0:
+        dodge = random.uniform(0, 1)
+        if dodge > 0.2 and dodge < 0.6:
+            bot.send_message(message.chat.id, 'Увернулся')
+        else:
+            player_hit = player_power - monster_protection
+            monster_health -+ player_hit

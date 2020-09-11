@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import random
-import time
 
 import telebot
 import sqlite3
 
 from telebot import types
 from src.config import TOKEN
-from src.transition import transition
+from src.functions.transition import transition
 
 bot = telebot.TeleBot(TOKEN)
 

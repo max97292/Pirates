@@ -2,14 +2,18 @@
 
 import emoji
 
+from src.functions.buy_functional import *
+from src.colony.center.store import *
 from src.colony.colony import *
 from src.colony.edge.store import *
 from src.enemys.enemys import *
 from src.forest.forest import *
 from src.beach.beach import *
-from src.person import *
+from src.functions.person import *
+from src.functions.wear import *
+from src.functions.unwear import *
 from src.start_island import *
-from src.transition import *
+from src.functions.transition import *
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -62,6 +66,7 @@ def text_content(message):
     except Exception as e:
         print(e)
 
+    time.sleep(0.1)
     if player[9] == 'transition':
         if deemojify(message.text.lower()) == 'персонаж':
             person_show_characteristics(message)
@@ -101,12 +106,20 @@ def text_content(message):
         if deemojify(message.text.lower()) == '︎ странная лавка':
             transition(message, 0)
             store_welcome(message)
+        if deemojify(message.text.lower()) == 'рынок':
+            store(message)
         if deemojify(message.text.lower()) == 'центр':
             transition(message, 0)
             colony_center(message)
         if deemojify(message.text.lower()) == 'причал':
             transition(message, 0)
             colony_pier(message)
+        if message.text.startswith('/buy_'):
+            buy(message)
+        if message.text.startswith('/wear_'):
+            wear(message)
+        if message.text.startswith('/unwear_'):
+            unwear(message)
         if deemojify(message.text.lower()) == 'вернуться на площадь':
             transition(message, 0)
             colony_start(message)

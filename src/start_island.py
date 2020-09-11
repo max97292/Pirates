@@ -61,21 +61,22 @@ def registration(message):
         except Exception as e:
             print(e)
 
-        STATUS.append(1)
-        STATUS.append(0)
-        STATUS.append(1000 * player_coeff)
-        STATUS.append(1000 * player_coeff)
-        STATUS.append(100 * player_coeff)
-        STATUS.append(50 * player_coeff)
-        STATUS.append(100)
-        STATUS.append('start_island')
+        STATUS.append(1) #lvl
+        STATUS.append(0) #exp
+        STATUS.append(1000 * player_coeff) #health
+        STATUS.append(1000 * player_coeff) #full_health
+        STATUS.append(100 * player_coeff) #power
+        STATUS.append(0) #protection
+        STATUS.append(100) #hunger
+        STATUS.append('start_island') #location
+        STATUS.append(50 * player_coeff) #agility
         for i in range(1, 4):
             EQUIPMENT.append(0)
 
         try:
             cursor.execute('insert into players values (?,?,?,?,?)', PLAYER)
             conn.commit()
-            cursor.execute('insert into status values (?,?,?,?,?,?,?,?,?,?)', STATUS)
+            cursor.execute('insert into status values (?,?,?,?,?,?,?,?,?,?,?)', STATUS)
             conn.commit()
             cursor.execute('insert into equipment values (?,?,?,?)', EQUIPMENT)
             conn.commit()
