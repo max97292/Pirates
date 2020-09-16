@@ -27,8 +27,14 @@ def buy(message):
     if pockets == '0':
         pockets = ''
         pockets += id
+        pockets = pockets.split(',')
+        pockets.sort()
+        pockets = ','.join(pockets)
     else:
         pockets += ',' + id
+        pockets = pockets.split(',')
+        pockets.sort()
+        pockets = ','.join(pockets)
 
     try:
         cursor.execute('update equipment set pockets=? where id_player=?', [pockets, message.from_user.id])

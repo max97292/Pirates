@@ -34,6 +34,7 @@ kb_colony_pier.row('⬅ Вернуться на площадь')
 
 
 def colony_start(message):
+    global kb_colony
     try:
         cursor.execute('update status set location=? where id_player=?', ['colony', message.from_user.id])
         conn.commit()
@@ -43,6 +44,7 @@ def colony_start(message):
 
 
 def colony_edge(message):
+    global kb_colony_edge
     try:
         cursor.execute('update status set location=? where id_player=?', ['colony_edge', message.from_user.id])
         conn.commit()
@@ -52,6 +54,7 @@ def colony_edge(message):
 
 
 def colony_center(message):
+    global kb_colony_center
     try:
         cursor.execute('update status set location=? where id_player=?', ['colony_center', message.from_user.id])
         conn.commit()
@@ -61,6 +64,7 @@ def colony_center(message):
 
 
 def colony_pier(message):
+    global kb_colony_pier
     try:
         cursor.execute('update status set location=? where id_player=?', ['colony_pier', message.from_user.id])
         conn.commit()

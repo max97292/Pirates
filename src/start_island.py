@@ -23,6 +23,7 @@ kb_directions.row('🏘 Поселение', '🌳 Лес', '🏝 Пляж')
 
 
 def registration(message):
+    global kb_directions
     CHAT = message.chat.id
     PLAYER = []
     STATUS = []
@@ -80,7 +81,7 @@ def registration(message):
             conn.commit()
             cursor.execute('insert into equipment values (?,?,?,?)', EQUIPMENT)
             conn.commit()
-            cursor.execute('insert into enemy_status values (?,?)', [message.from_user.id, 0])
+            cursor.execute('insert into enemy_status values (?,?,?,?)', [message.from_user.id, 0, 0, 5])
             conn.commit()
         except Exception as e:
             print(e)

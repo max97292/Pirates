@@ -6,7 +6,11 @@ import telebot
 import sqlite3
 
 from telebot import types
+
 from src.config import TOKEN
+
+from src.start_island import *
+from src.colony.colony import *
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -29,6 +33,19 @@ def person_show_characteristics(message):
         equipment = cursor.fetchone()
     except Exception as e:
         print(e)
+
+    if status[9] == 'start_island':
+        keyboard = kb_directions
+    elif status[9] == 'colony':
+        keyboard = kb_colony
+    elif status[9] == 'colony_edge':
+        keyboard = kb_colony_edge
+    elif status[9] == 'colony_center':
+        keyboard = kb_colony_center
+    elif status[9] == 'colony_pier':
+        keyboard = kb_colony_pier
+    else:
+        keyboard = types.ReplyKeyboardMarkup()
 
     if player[2] == 1:
         player_class = classes[0][0]
@@ -103,4 +120,4 @@ def person_show_characteristics(message):
                                             status[6],
                                             status[10],
                                             status[7],
-                                            status[8], status[8],weapon, msg))
+                                            status[8], status[8],weapon, msg), reply_markup=keyboard)

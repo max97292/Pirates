@@ -75,6 +75,8 @@ def text_content(message):
     else:
         if deemojify(message.text.lower()) == 'атаковать':
             attack_enemy(message)
+        if deemojify(message.text.lower()) == 'обойти стороной':
+            pass_by(message)
         if deemojify(message.text.lower()) == 'персонаж':
             person_show_characteristics(message)
         if deemojify(message.text.lower()) == 'назад':
