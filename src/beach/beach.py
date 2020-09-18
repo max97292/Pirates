@@ -7,6 +7,7 @@ import sqlite3
 
 from telebot import types
 from src.config import TOKEN
+from src.enemys.enemys import select_enemys
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -15,6 +16,7 @@ cursor = conn.cursor()
 
 
 def beach_start(message):
+    global kb_beach
     kb_beach = types.ReplyKeyboardMarkup(True, False)
 
     try:
@@ -64,3 +66,7 @@ def beach_forward(message):
     except Exception as e:
         print(e)
     bot.send_message(message.chat.id, 'Ты прошелся дальше по пляжу', reply_markup=kb_beach)
+
+    chance = random.uniform(0, 1)
+    if chance < 0.5:
+        select_enemys(message)
