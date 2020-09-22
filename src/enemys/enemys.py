@@ -186,26 +186,41 @@ def attack_player(message):
         except Exception as e:
             print(e)
 
-        if player_health <= 0:
+        if player_health <= 10:
             try:
                 cursor.execute('update enemy_status set id_enemy=?, health=?, move=? where id_player=?',
                                [0, 0, 5, message.from_user.id])
                 conn.commit()
-                cursor.execute('update status set health=? where id_player=?',
-                               [int(player_health), message.from_user.id])
+                cursor.execute('update status set health=?, location=? where id_player=?',
+                               [player_health, 'transition', message.from_user.id])
                 conn.commit()
             except Exception as e:
                 print(e)
 
-            bot.send_message(message.chat.id, 'Ты умер')
+            bot.send_message(message.chat.id, 'Ты умер', reply_markup=types.ReplyKeyboardRemove())
+
+            time.sleep(3)
+
+            try:
+                cursor.execute('update status set health=?, location=? where id_player=?',
+                               [player_full_health, 'start_island', message.from_user.id])
+                conn.commit()
+            except Exception as e:
+                print(e)
+
+            bot.send_message(message.chat.id, 'Ты очнулся в самом начале', reply_markup=types.ReplyKeyboardMarkup(True, False).row('🏘 Поселение', '🌳 Лес', '🏝 Пляж'))
+
 
 
 def attack_enemy(message):
     try:
-        cursor.execute('select * from enemy_status where id_player=?', [message.from_user.id])
-        enemy_status = cursor.fetchone()
         cursor.execute('select * from status where id_player=?', [message.from_user.id])
         status = cursor.fetchone()
+        status_location = status[9]
+        cursor.execute('update status set location=? where id_player=?', ['transition', message.from_user.id])
+        conn.commit()
+        cursor.execute('select * from enemy_status where id_player=?', [message.from_user.id])
+        enemy_status = cursor.fetchone()
         cursor.execute('select * from enemy where id=?', [enemy_status[1]])
         enemy = cursor.fetchone()
         cursor.execute('select kit from equipment where id_player=?', [message.from_user.id])
@@ -213,109 +228,128 @@ def attack_enemy(message):
         kit = kit[0]
         cursor.execute('select * from items where id=?', [kit])
         item = cursor.fetchone()
+        #time.sleep(0.1)
     except Exception as e:
         print(e)
 
-    if enemy == None:
-        bot.send_message(message.chat.id, 'Тут нет монстров')
 
+    try:
+        cursor.execute('update status set location=? where id_player=?', [status_location, message.from_user.id])
+        conn.commit()
+    except Exception as  e:
+        print(e)
+
+    if status_location == 'transition':
+        pass
     else:
 
-        player_health = status[4]
-        monster_health = enemy_status[2]
+        if enemy == None:
+            bot.send_message(message.chat.id, 'Тут нет монстров')
 
-        player_full_health = status[5]
-        monster_full_health = enemy[2]
-
-        player_power = status[6]
-        monster_power = enemy[3]
-
-        player_protection = status[7]
-        monster_protection = enemy[4]
-
-        player_agility = status[10]
-        player_agility = player_agility / 100
-
-        monster_name = enemy[1]
-
-        monster_type = enemy[5]
-        monster_incoming = enemy[6]
-        monster_outgoing = list(str(enemy[7]))
-
-        move = enemy_status[3]
-
-        if item is not None:
-            item_damage = item[2]
-            item_usability = item[3]
-            item_usability = item_usability / 100
-            item_type = item[6]
         else:
-            item_damage = 0
-            item_usability = 0 / 100
-            item_type = 0
 
-        damage = player_power
+            player_health = status[4]
+            monster_health = enemy_status[2]
 
-        low_damage = damage * 0.5
-        high_damage = damage * 1.5
+            player_full_health = status[5]
+            monster_full_health = enemy[2]
 
-        usability = random.uniform(0, 1)
-        if (item_usability) > usability:
-            low_damage = damage * item_usability
+            player_power = status[6]
+            monster_power = enemy[3]
 
-        attack = random.randint(low_damage, high_damage)
+            player_protection = status[7]
+            monster_protection = enemy[4]
 
-        if monster_incoming == 1:
-            if item_type == 2:
-                pass
+            player_agility = status[10]
+            player_agility = player_agility / 100
+
+            monster_name = enemy[1]
+
+            monster_type = enemy[5]
+            monster_incoming = enemy[6]
+            monster_outgoing = list(str(enemy[7]))
+
+            move = enemy_status[3]
+
+            if item is not None:
+                item_damage = item[2]
+                item_usability = item[3]
+                item_usability = item_usability / 100
+                item_type = item[6]
             else:
-                attack -= attack * random.uniform(0, 0.3)
-        if monster_incoming == 2:
-            if item_type == 1:
-                pass
-            elif item_type == 2:
-                attack -= attack * random.uniform(0, 0.1)
-            else:
-                attack -= attack * random.uniform(0, 0.9)
+                item_damage = 0
+                item_usability = 0 / 100
+                item_type = 0
 
-        chance = random.uniform(0, 1)
-        if chance < 0.125:
-            attack *= 0
-            bot.send_message(message.chat.id, 'Монстр уклонился')
-        else:
-            chance = random.uniform(0, 0.875)
+            damage = player_power
+
+            low_damage = damage * 0.5
+            high_damage = damage * 1.5
+
+            usability = random.uniform(0, 1)
+            if (item_usability) > usability:
+                low_damage = damage * item_usability
+
+            attack = random.randint(low_damage, high_damage)
+
+            if monster_incoming == 1:
+                if item_type == 2:
+                    pass
+                else:
+                    attack -= attack * random.uniform(0, 0.3)
+            if monster_incoming == 2:
+                if item_type == 1:
+                    pass
+                elif item_type == 2:
+                    attack -= attack * random.uniform(0, 0.1)
+                else:
+                    attack -= attack * random.uniform(0, 0.9)
+
+            chance = random.uniform(0, 1)
             if chance < 0.125:
-                attack *= 0.5
-                monster_health -= attack
-                if monster_health <= 0:
-                    monster_health = 0
-                bot.send_message(message.chat.id,
-                                 'Монстр избежал части урона\nАтака -%d💔\n❤ монстра: %d' % (attack, monster_health))
+                attack *= 0
+                bot.send_message(message.chat.id, 'Монстр уклонился')
             else:
-                monster_health -= attack
-                if monster_health <= 0:
-                    monster_health = 0
-                bot.send_message(message.chat.id, 'Ты атаковал -%d💔\n❤ монстра: %d' % (attack, monster_health))
-        try:
-            cursor.execute('update enemy_status set health=?, move=? where id_player=?',
-                           [int(monster_health), int(0), message.from_user.id])
-            conn.commit()
-        except Exception as e:
-            print(e)
-
-        if monster_health <= 0:
+                chance = random.uniform(0, 0.875)
+                if chance < 0.125:
+                    attack *= 0.5
+                    monster_health -= attack
+                    if monster_health <= 0:
+                        monster_health = 0
+                    bot.send_message(message.chat.id,
+                                     'Монстр избежал части урона\nАтака -%d💔\n❤ монстра: %d' % (attack, monster_health))
+                else:
+                    monster_health -= attack
+                    if monster_health <= 0:
+                        monster_health = 0
+                    bot.send_message(message.chat.id, 'Ты атаковал -%d💔\n❤ монстра: %d' % (attack, monster_health))
             try:
-                cursor.execute('update enemy_status set id_enemy=?, health=?, move=? where id_player=?',
-                               [0, 0, 5, message.from_user.id])
+                cursor.execute('update enemy_status set health=?, move=? where id_player=?',
+                               [int(monster_health), int(0), message.from_user.id])
                 conn.commit()
             except Exception as e:
                 print(e)
 
-            bot.send_message(message.chat.id, 'Монстр умер')
-        else:
-            attack_player(message)
+            if monster_health <= 0:
+                try:
+                    cursor.execute('update enemy_status set id_enemy=?, health=?, move=? where id_player=?',
+                                   [0, 0, 5, message.from_user.id])
+                    conn.commit()
+                except Exception as e:
+                    print(e)
 
-from src.beach.beach import *
+                if status_location == 'beach':
+                    keyboard = types.ReplyKeyboardMarkup(True, False).row('🚶 Идти прямо', '🌳 Свернуть в лес')
+                    keyboard.row('⬅ Назад')
+                if status_location.startswith('forest'):
+                    keyboard = types.ReplyKeyboardMarkup(True, False).row('⬆ Двигаться дальше')
+                    keyboard.row('⬅ Назад')
+
+
+
+                bot.send_message(message.chat.id, 'Монстр умер', reply_markup=keyboard)
+            else:
+                attack_player(message)
 
 def pass_by(message):
     chance = random.uniform(0, 1)
@@ -328,9 +362,13 @@ def pass_by(message):
             status = cursor.fetchone()
         except Exception as e:
             print(e)
-        if status[9] == 'forest':
-            keyboard = beach_start(message).kb_beach
-        bot.send_message(message.chat.id, 'Ты обошел стороной монстра')
+        if status[9] == 'beach':
+            keyboard = types.ReplyKeyboardMarkup(True, False).row('🚶 Идти прямо', '🌳 Свернуть в лес')
+            keyboard.row('⬅ Назад')
+        if status[9].startswith('forest'):
+            keyboard = types.ReplyKeyboardMarkup(True, False).row('⬆ Двигаться дальше')
+            keyboard.row('⬅ Назад')
+        bot.send_message(message.chat.id, 'Ты обошел стороной монстра', reply_markup=keyboard)
     else:
         bot.send_message(message.chat.id, 'Ты пытался обойти, но монстр решил на тебя напасть')
         attack_player(message)

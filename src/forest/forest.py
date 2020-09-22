@@ -6,6 +6,7 @@ import sqlite3
 
 from telebot import types
 from src.config import TOKEN
+from src.enemys.enemys import select_enemys
 from src.functions.transition import transition
 
 bot = telebot.TeleBot(TOKEN)
@@ -60,6 +61,10 @@ def forest_forward(message):
             kb_forest.row('⬅ Назад')
         bot.send_message(message.chat.id, 'Добро пожаловать в большой лес', reply_markup=kb_forest)
 
+    chance = random.uniform(0, 1)
+    if chance < 0.5:
+        select_enemys(message)
+
 
 def forest_backward(message):
     kb_forest = types.ReplyKeyboardMarkup(True, False)
@@ -93,3 +98,7 @@ def forest_backward(message):
         else:
             kb_forest.row('⬅ Назад')
         bot.send_message(message.chat.id, 'Добро пожаловать в большой лес', reply_markup=kb_forest)
+
+    chance = random.uniform(0, 1)
+    if chance < 0.5:
+        select_enemys(message)

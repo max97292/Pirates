@@ -81,40 +81,40 @@ def text_content(message):
             person_show_characteristics(message)
         if deemojify(message.text.lower()) == 'назад':
             if player[9] == 'beach':
-                transition(message, 0)
+                transition(message, 1)
                 look_around(message)
             if player[9].startswith('forest'):
                 if player[9] == 'forest':
-                    transition(message, 0)
+                    transition(message, 1)
                     look_around(message)
                 else:
                     forest_backward(message)
             if player[9] == 'colony':
-                transition(message, 0)
+                transition(message, 1)
                 look_around(message)
             if player[9] == 'colony_edge_store':
-                transition(message, 0)
+                transition(message, 1)
                 colony_edge(message)
 
         if deemojify(message.text.lower()) == 'осмотреться':
-            transition(message, 0)
+            transition(message, 1)
             look_around(message)
         if deemojify(message.text.lower()) == 'поселение':
-            transition(message, 0)
+            transition(message, 1)
             colony_start(message)
         if deemojify(message.text.lower()) == 'окраина':
-            transition(message, 0)
+            transition(message, 1)
             colony_edge(message)
         if deemojify(message.text.lower()) == '︎ странная лавка':
-            transition(message, 0)
+            transition(message, 1)
             store_welcome(message)
         if deemojify(message.text.lower()) == 'рынок':
             store(message)
         if deemojify(message.text.lower()) == 'центр':
-            transition(message, 0)
+            transition(message, 1)
             colony_center(message)
         if deemojify(message.text.lower()) == 'причал':
-            transition(message, 0)
+            transition(message, 1)
             colony_pier(message)
         if message.text.startswith('/buy_'):
             buy(message)
@@ -123,18 +123,18 @@ def text_content(message):
         if message.text.startswith('/unwear_'):
             unwear(message)
         if deemojify(message.text.lower()) == 'вернуться на площадь':
-            transition(message, 0)
+            transition(message, 1)
             colony_start(message)
         if deemojify(message.text.lower()) == 'лес' or deemojify(message.text.lower()) == 'свернуть в лес':
-            transition(message, 0)
+            transition(message, 1)
             forest_start(message)
         if deemojify(message.text.lower()) == 'пляж':
-            transition(message, 0)
+            transition(message, 1)
             beach_start(message)
         if deemojify(message.text.lower()) == 'двигаться дальше':
             forest_forward(message)
         if deemojify(message.text.lower()) == 'идти прямо':
-            transition(message, 0)
+            transition(message, 1)
             beach_forward(message)
 
 
@@ -143,4 +143,4 @@ while True:
         bot.polling(none_stop=True)
     except Exception as e:
         print(e)
-        time.sleep(15)
+        time.sleep(5)
