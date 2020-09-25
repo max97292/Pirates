@@ -140,7 +140,7 @@ def text_content(message):
 
 while True:
     try:
-        bot.polling(none_stop=True)
+        bot.infinity_polling(none_stop=True, timeout=20)
     except Exception as e:
         print(e)
         time.sleep(5)
