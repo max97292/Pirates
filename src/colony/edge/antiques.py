@@ -18,10 +18,10 @@ kb_welcome = types.ReplyKeyboardMarkup(True, False)
 kb_welcome.row('Назад')
 
 
-def store_welcome(message):
+def colony_antiques(message):
     try:
-        cursor.execute('update status set location=? where id_player=?', ['colony_edge_store', message.from_user.id])
+        cursor.execute('update status set location=? where id_player=?', ['colony_edge_market', message.from_user.id])
         conn.commit()
     except Exception as e:
         print(e)
-    bot.send_message(message.chat.id, 'Добро пожаловать в странную лавку', reply_markup=kb_welcome)
+    bot.send_message(message.chat.id, 'Добро пожаловать в магазин антиквариата', reply_markup=kb_welcome)

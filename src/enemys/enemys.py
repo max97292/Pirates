@@ -166,15 +166,17 @@ def attack_player(message):
                 player_health -= enemy_attack
                 if player_health <= 0:
                     player_health = 0
-                bot.send_message(message.chat.id, 'Игрок избежал части урона\nМонстр атаковал -%d💔\n❤ игрока: %d' % (
-                    enemy_attack, player_health))
+                bot.send_message(message.chat.id,
+                                 'Игрок избежал части урона\nМонстр нанес %d💔\nЗдоровье игрока: %d❤' % (
+                                     enemy_attack, player_health))
             else:
                 enemy_attack *= 1
                 player_health -= enemy_attack
                 if player_health <= 0:
                     player_health = 0
                 bot.send_message(message.chat.id,
-                                 'Монстр атаковал -%d💔\n❤ игрока: %d' % (enemy_attack, player_health))
+                                 'Монстр атаковал тебя и нанес %d💔\nЗдоровье игрока: %d❤' % (
+                                 enemy_attack, player_health))
 
         try:
             cursor.execute('update enemy_status set health=?, move=? where id_player=?',
@@ -228,7 +230,8 @@ def attack_enemy(message):
         kit = kit[0]
         cursor.execute('select * from items where id=?', [kit])
         item = cursor.fetchone()
-        #time.sleep(0.1)
+        cursor.execute('update enemy_status set move=? where id_player=?', [5, message.from_user.id])
+        conn.commit()
     except Exception as e:
         print(e)
 
@@ -317,12 +320,14 @@ def attack_enemy(message):
                     if monster_health <= 0:
                         monster_health = 0
                     bot.send_message(message.chat.id,
-                                     'Монстр избежал части урона\nАтака -%d💔\n❤ монстра: %d' % (attack, monster_health))
+                                     '%s избежал части урона\nТы нанес %d💔\nЗдоровье монстра: %d🖤' % (
+                                     monster_name, attack, monster_health))
                 else:
                     monster_health -= attack
                     if monster_health <= 0:
                         monster_health = 0
-                    bot.send_message(message.chat.id, 'Ты атаковал -%d💔\n❤ монстра: %d' % (attack, monster_health))
+                    bot.send_message(message.chat.id, 'Ты атаковал %s и нанес %d💔\nЗдоровье монстра: %d🖤' % (
+                    monster_name, attack, monster_health))
             try:
                 cursor.execute('update enemy_status set health=?, move=? where id_player=?',
                                [int(monster_health), int(0), message.from_user.id])
@@ -345,11 +350,12 @@ def attack_enemy(message):
                     keyboard = types.ReplyKeyboardMarkup(True, False).row('⬆ Двигаться дальше')
                     keyboard.row('⬅ Назад')
 
-
-
                 bot.send_message(message.chat.id, 'Монстр умер', reply_markup=keyboard)
             else:
                 attack_player(message)
+        attack_timer(message)
+    it = 0
+    et = 0
 
 def pass_by(message):
     chance = random.uniform(0, 1)
@@ -372,3 +378,39 @@ def pass_by(message):
     else:
         bot.send_message(message.chat.id, 'Ты пытался обойти, но монстр решил на тебя напасть')
         attack_player(message)
+
+
+def attack_timer(message):
+    timer = 4
+    try:
+        cursor.execute('update enemy_status set move=? where id_player=?', [5, message.from_user.id])
+        conn.commit()
+        cursor.execute('select * from enemy_status where id_player=?', [message.from_user.id])
+        enemy = cursor.fetchone()
+        enemy_health = enemy[2]
+        cursor.execute('select * from status where id_player=?', [message.from_user.id])
+        player_health = cursor.fetchone()
+        player_health = player_health[4]
+    except Exception as e:
+        print(e)
+
+    while timer != 0:
+        if enemy[3] != 3:
+            try:
+                cursor.execute('select * from enemy_status where id_player=?', [message.from_user.id])
+                enemy_status = cursor.fetchone()
+                cursor.execute('update enemy_status set move=? where id_player=?', [3, message.from_user.id])
+                conn.commit()
+            except Exception as e:
+                print(e)
+
+            if enemy_status[2] == enemy_health:
+                timer -= 1
+                time.sleep(1)
+            else:
+                timer = 0
+                break
+            if timer == 1:
+                timer = 0
+                if enemy_health > 0 and player_health > 0:
+                    attack_enemy(message)

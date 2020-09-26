@@ -2,10 +2,11 @@
 
 import emoji
 
+from src.colony.edge.herbal_shop import *
 from src.functions.buy_functional import *
-from src.colony.center.store import *
+from src.colony.center.market import *
 from src.colony.colony import *
-from src.colony.edge.store import *
+from src.colony.edge.antiques import *
 from src.enemys.enemys import *
 from src.forest.forest import *
 from src.beach.beach import *
@@ -92,9 +93,49 @@ def text_content(message):
             if player[9] == 'colony':
                 transition(message, 1)
                 look_around(message)
-            if player[9] == 'colony_edge_store':
+            if player[9] == 'colony_edge_market':
                 transition(message, 1)
                 colony_edge(message)
+            if player[9] == 'colony_center_market':
+                transition(message, 1)
+                colony_center(message)
+            if player[9] == 'colony_edge_wicked':
+                transition(message, 1)
+                colony_edge(message)
+            if player[9] == 'colony_edge_herbal_shop':
+                transition(message, 1)
+                colony_edge(message)
+            if player[9] == 'colony_edge_herbal_shop_potion':
+                transition(message, 1)
+                colony_edge_herbal_shop(message)
+            if player[9] == 'correct_health':
+                transition(message, 1)
+                colony_edge_herbal_shop(message)
+            if player[9] == 'colony_center_hall':
+                transition(message, 1)
+                colony_center(message)
+            if player[9] == 'colony_center_tavern':
+                transition(message, 1)
+                colony_center(message)
+            if player[9] == 'colony_pier_lighthouse':
+                transition(message, 1)
+                colony_pier(message)
+            if player[9] == 'colony_pier_forge':
+                transition(message, 1)
+                colony_pier(message)
+            if player[9] == 'colony_pier_bar':
+                transition(message, 1)
+                colony_pier(message)
+            if player[9] == '':
+                transition(message, 1)
+            if player[9] == '':
+                transition(message, 1)
+            if player[9] == '':
+                transition(message, 1)
+            if player[9] == '':
+                transition(message, 1)
+            if player[9] == '':
+                transition(message, 1)
 
         if deemojify(message.text.lower()) == 'осмотреться':
             transition(message, 1)
@@ -105,17 +146,58 @@ def text_content(message):
         if deemojify(message.text.lower()) == 'окраина':
             transition(message, 1)
             colony_edge(message)
-        if deemojify(message.text.lower()) == '︎ странная лавка':
+        if deemojify(message.text.lower()) == 'магазин антиквариата':
             transition(message, 1)
-            store_welcome(message)
-        if deemojify(message.text.lower()) == 'рынок':
-            store(message)
+            colony_antiques(message)
+        if deemojify(message.text.lower()) == 'злачный переулок':
+            transition(message, 1)
+            colony_edge_wicked(message)
+        if deemojify(message.text.lower()) == 'лавка травника':
+            transition(message, 1)
+            colony_edge_herbal_shop(message)
+        if deemojify(message.text.lower()) == 'поправить здоровье':
+            transition(message, 1)
+            correct_health(message)
+        if deemojify(message.text.lower()) == 'восстановить здоровье':
+            heal(message)
+        if deemojify(message.text.lower()) == 'полка с зельями':
+            transition(message, 1)
+            colony_edge_herbal_shop_potion(message)
+        if deemojify(message.text.lower()) == 'активированный уголь':
+            activated_coal(message)
+        if deemojify(message.text.lower()) == 'микстура восстановления':
+            recovery_potion(message)
+        if deemojify(message.text.lower()) == 'зелье исцеления':
+            healing_potion(message)
+        if deemojify(message.text.lower()) == 'зелье защиты':
+            protection_potion(message)
         if deemojify(message.text.lower()) == 'центр':
             transition(message, 1)
             colony_center(message)
+        if deemojify(message.text.lower()) == 'ратуша':
+            transition(message, 1)
+            colony_center_hall(message)
+        if deemojify(message.text.lower()) == 'рынок':
+            transition(message, 1)
+            colony_center_market(message)
+        if deemojify(message.text.lower()) == 'торговец':
+            colony_market(message)
+        if deemojify(message.text.lower()) == 'кабак':
+            transition(message, 1)
+            colony_center_tavern(message)
         if deemojify(message.text.lower()) == 'причал':
             transition(message, 1)
             colony_pier(message)
+        if deemojify(message.text.lower()) == 'маяк':
+            transition(message, 1)
+            colony_pier_lighthouse(message)
+        if deemojify(message.text.lower()) == 'кузня':
+            transition(message, 1)
+            colony_pier_forge(message)
+        if deemojify(message.text.lower()) == 'бар':
+            transition(message, 1)
+            colony_pier_bar(message)
+
         if message.text.startswith('/buy_'):
             buy(message)
         if message.text.startswith('/wear_'):
@@ -140,7 +222,7 @@ def text_content(message):
 
 while True:
     try:
-        bot.infinity_polling(none_stop=True, timeout=20)
+        bot.infinity_polling(none_stop=True)
     except Exception as e:
         print(e)
         time.sleep(5)

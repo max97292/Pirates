@@ -13,7 +13,7 @@ bot = telebot.TeleBot(TOKEN)
 conn = sqlite3.connect("DataBase.db", check_same_thread=False)
 cursor = conn.cursor()
 
-def store(message):
+def colony_market(message):
     try:
         cursor.execute('select * from items')
         items = cursor.fetchall()
@@ -25,7 +25,9 @@ def store(message):
     msg = 'Доступные к покупки товары:\n\n'
 
     for item in items:
-        count += 1
-        msg += '◽%d) %s (%d💥 / %d%%⚙) (%d-%d) /buy_%d\n' % (count, item[1], item[2], item[3], item[4], item[5], item[0])
+        if str(item[0]).startswith('1'):
+            count += 1
+            msg += '◽%d) %s (%d💥 / %d%%⚙) (%d-%d) /buy_%d\n' % (
+            count, item[1], item[2], item[3], item[4], item[5], item[0])
 
     bot.send_message(message.chat.id, msg)
