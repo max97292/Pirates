@@ -3,6 +3,7 @@
 import emoji
 
 from src.colony.edge.herbal_shop import *
+from src.colony.pier.lighthouse import *
 from src.functions.buy_functional import *
 from src.colony.center.market import *
 from src.colony.colony import *
@@ -191,6 +192,8 @@ def text_content(message):
         if deemojify(message.text.lower()) == 'маяк':
             transition(message, 1)
             colony_pier_lighthouse(message)
+        if deemojify(message.text.lower()) == 'войти и осмотреться':
+            select_spec(message)
         if deemojify(message.text.lower()) == 'кузня':
             transition(message, 1)
             colony_pier_forge(message)
