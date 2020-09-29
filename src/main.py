@@ -194,6 +194,7 @@ def text_content(message):
             colony_pier_lighthouse(message)
         if deemojify(message.text.lower()) == 'войти и осмотреться':
             select_spec(message)
+            bot.register_next_step_handler_by_chat_id(message.chat.id, select_next)
         if deemojify(message.text.lower()) == 'кузня':
             transition(message, 1)
             colony_pier_forge(message)

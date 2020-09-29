@@ -223,10 +223,16 @@ def colony_pier_lighthouse(message):
         cursor.execute('update status set location=? where id_player=?',
                        ['colony_pier_lighthouse', message.from_user.id])
         conn.commit()
+        cursor.execute('select * from players where id=?', [message.from_user.id])
+        spec = cursor.fetchone()
+        spec = spec[3]
     except Exception as e:
         print(e)
-    bot.send_message(message.chat.id, 'Добро пожаловать в маяк', reply_markup=kb_colony_pier_lighthouse_first)
-
+    if spec == 0:
+        keyboard = kb_colony_pier_lighthouse_first
+    else:
+        keyboard = kb_colony_pier_lighthouse
+    bot.send_message(message.chat.id, 'Добро пожаловать в маяк', reply_markup=keyboard)
 
 def colony_pier_forge(message):
     global kb_colony_pier_forge
