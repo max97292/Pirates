@@ -23,7 +23,6 @@ kb_colony_edge_wicked = types.ReplyKeyboardMarkup(True, False)
 kb_colony_edge_wicked_first = types.ReplyKeyboardMarkup(True, False)
 
 kb_colony_edge_herbal_shop = types.ReplyKeyboardMarkup(True, False)
-kb_colony_edge_herbal_shop_potion = types.ReplyKeyboardMarkup(True, False)
 
 kb_colony_center = types.ReplyKeyboardMarkup(True, False)
 
@@ -62,10 +61,6 @@ kb_colony_edge_wicked.row('⬅ Назад')
 
 kb_colony_edge_herbal_shop.row('🍵 Поправить здоровье', '⚱ Полка с зельями', '💐 Спросить, нужна ли помощь')
 kb_colony_edge_herbal_shop.row('⬅ Назад')
-
-kb_colony_edge_herbal_shop_potion.row('🏺 Активированный уголь', '🍵 Микстура восстановления', '⚱ Зелье защиты')
-kb_colony_edge_herbal_shop_potion.row('🧉 Экспериментальное зелье', '🍶 Зелье исцеления')
-kb_colony_edge_herbal_shop_potion.row('⬅ Назад')
 
 kb_colony_center.row('Персонаж')
 kb_colony_center.row('⛪ Ратуша', '💰 Рынок', '🍺 Кабак')
@@ -158,13 +153,21 @@ def colony_edge_herbal_shop(message):
 def colony_edge_herbal_shop_potion(message):
     global kb_colony_edge_herbal_shop_potion
     try:
-        cursor.execute('update status set location=? where id_player=?',
+        '''cursor.execute('update status set location=? where id_player=?',
                        ['colony_edge_herbal_shop_potion', message.from_user.id])
-        conn.commit()
+        conn.commit()'''
+        cursor.execute('select * from potions')
+        potions = cursor.fetchall()
     except Exception as e:
         print(e)
-    bot.send_message(message.chat.id, 'Вы посмотрели на полку с зельями',
-                     reply_markup=kb_colony_edge_herbal_shop_potion)
+    msg = 'Вы посмотрели на полку с зельями\nДоступные зелья к покупке:\n\n'
+    count = 0
+
+    for item in potions:
+        count += 1
+        msg += '◽%d) %s 💰%d /buy_%d\n' % (count, item[1], item[2], item[0])
+
+    bot.send_message(message.chat.id, msg)
 
 
 def colony_center(message):

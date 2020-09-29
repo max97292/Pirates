@@ -19,9 +19,10 @@ def select_spec(message):
     try:
         cursor.execute('select * from players where id=?', [message.from_user.id])
         players = cursor.fetchone()
+        cursor.execute('select * from player_spec')
+        spec = cursor.fetchall()
     except Exception as e:
         print(e)
-
     if players[2] == 1:
         kb_spec.row('🎭 Счастливчик', '💰 Торгаш')
     if players[2] == 2:

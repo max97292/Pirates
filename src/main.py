@@ -162,15 +162,15 @@ def text_content(message):
         if deemojify(message.text.lower()) == 'восстановить здоровье':
             heal(message)
         if deemojify(message.text.lower()) == 'полка с зельями':
-            transition(message, 1)
+            # transition(message, 1)
             colony_edge_herbal_shop_potion(message)
-        if deemojify(message.text.lower()) == 'активированный уголь':
+        if deemojify(message.text.lower()) == '/use_201':
             activated_coal(message)
-        if deemojify(message.text.lower()) == 'микстура восстановления':
+        if deemojify(message.text.lower()) == '/use_202':
             recovery_potion(message)
-        if deemojify(message.text.lower()) == 'зелье исцеления':
+        if deemojify(message.text.lower()) == '/use_205':
             healing_potion(message)
-        if deemojify(message.text.lower()) == 'зелье защиты':
+        if deemojify(message.text.lower()) == '/use_203':
             protection_potion(message)
         if deemojify(message.text.lower()) == 'центр':
             transition(message, 1)
@@ -229,4 +229,4 @@ while True:
         bot.infinity_polling(none_stop=True)
     except Exception as e:
         print(e)
-        time.sleep(5)
+        time.sleep(3)

@@ -31,6 +31,12 @@ def person_show_characteristics(message):
         status = cursor.fetchone()
         cursor.execute('select * from equipment where id_player=?', [message.from_user.id])
         equipment = cursor.fetchone()
+        if player[3] != 0:
+            cursor.execute('select * from player_spec where id=?', [player[3]])
+            spec = cursor.fetchone()
+            spec = spec[1]
+        else:
+            spec = 'Неизвестно'
     except Exception as e:
         print(e)
 
@@ -79,6 +85,8 @@ def person_show_characteristics(message):
         try:
             cursor.execute('select * from items')
             item = cursor.fetchall()
+            cursor.execute('select * from potions')
+            potions = cursor.fetchall()
         except Exception as e:
             print(e)
 
@@ -87,7 +95,11 @@ def person_show_characteristics(message):
         for items_arr in items:
             for item_arr in item:
                 if str(item_arr[0]) == (items_arr):
-                    msg += '▶' + item_arr[1] + ' (' + str(item_arr[2]) + '💥 / ' + str(item_arr[3]) + '%⚙)' + ' /wear_' + str(item_arr[0]) + '\n'
+                    msg += '▶' + item_arr[1] + ' (' + str(item_arr[2]) + '💥 / ' + str(
+                        item_arr[3]) + '%⚙)' + ' /wear_' + str(item_arr[0]) + '\n'
+            for item_arr in potions:
+                if str(item_arr[0]) == items_arr:
+                    msg += '▶' + item_arr[1] + ' /use_' + str(item_arr[0]) + '\n'
     else:
         msg = ''
 
@@ -112,7 +124,7 @@ def person_show_characteristics(message):
                                       '%s'
                                       '' % (player_race,
                                             str(player_class),
-                                            player[3],
+                                            str(spec),
                                             status[1],
                                             status[2],
                                             status[3], status[3],
@@ -120,4 +132,4 @@ def person_show_characteristics(message):
                                             status[6],
                                             status[10],
                                             status[7],
-                                            status[8], status[8],weapon, msg), reply_markup=keyboard)
+                                            status[8], status[8], weapon, msg), reply_markup=keyboard)
