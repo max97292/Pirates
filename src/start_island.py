@@ -83,6 +83,8 @@ def registration(message):
             conn.commit()
             cursor.execute('insert into enemy_status values (?,?,?,?)', [message.from_user.id, 0, 0, 5])
             conn.commit()
+            cursor.execute('insert into cave_status values (?,?)', [message.from_user.id, 0])
+            conn.commit()
         except Exception as e:
             print(e)
 

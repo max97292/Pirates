@@ -65,7 +65,7 @@ def select_enemys(message):
                 ENEMYS.append(item)
                 search = True
 
-    if status[9] == 'cave':
+    if status[9].startswith('cave'):
         cursor.execute('select * from enemy')
         enemys = cursor.fetchall()
         for item in enemys:
@@ -89,6 +89,7 @@ def select_enemys(message):
 
         bot.send_message(message.chat.id, 'Ты встретил %s (%d❤) на своём пути' % (selected_enemy[1], selected_enemy[2]),
                          reply_markup=kb_attack)
+        return selected_enemy[0]
 
 
 def attack_player(message):
@@ -349,6 +350,8 @@ def attack_enemy(message):
                 if status_location.startswith('forest'):
                     keyboard = types.ReplyKeyboardMarkup(True, False).row('⬆ Двигаться дальше')
                     keyboard.row('⬅ Назад')
+                if status_location.startswith('cave'):
+                    keyboard = types.ReplyKeyboardMarkup(True, False).row('⬆️ Идти вперед')
 
                 bot.send_message(message.chat.id, 'Монстр умер', reply_markup=keyboard)
             else:
@@ -374,6 +377,8 @@ def pass_by(message):
         if status[9].startswith('forest'):
             keyboard = types.ReplyKeyboardMarkup(True, False).row('⬆ Двигаться дальше')
             keyboard.row('⬅ Назад')
+        if status[9].startswith('cave'):
+            keyboard = types.ReplyKeyboardMarkup(True, False).row('⬆️ Идти вперед')
         bot.send_message(message.chat.id, 'Ты обошел стороной монстра', reply_markup=keyboard)
     else:
         bot.send_message(message.chat.id, 'Ты пытался обойти, но монстр решил на тебя напасть')

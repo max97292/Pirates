@@ -4,6 +4,7 @@ import emoji
 
 from src.colony.edge.herbal_shop import *
 from src.colony.pier.lighthouse import *
+from src.forest.cave import *
 from src.functions.buy_functional import *
 from src.colony.center.market import *
 from src.colony.colony import *
@@ -40,9 +41,16 @@ def deemojify(string):
 def start_message(message):
     registration(message)
 
+
+@bot.message_handler(commands=['hero'])
+def hero_command(message):
+    person_show_characteristics(message)
+
+
 @bot.message_handler(commands=['en'])
 def enemy(message):
     select_enemys(message)
+
 
 @bot.message_handler(commands=['clear'])
 def clear_player(message):
@@ -214,6 +222,10 @@ def text_content(message):
         if deemojify(message.text.lower()) == 'лес' or deemojify(message.text.lower()) == 'свернуть в лес':
             transition(message, 1)
             forest_start(message)
+        if deemojify(message.text.lower()) == 'пещера':
+            welcom_cave(message)
+        if deemojify(message.text.lower()) == 'идти вперед':
+            forward_cave(message)
         if deemojify(message.text.lower()) == 'пляж':
             transition(message, 1)
             beach_start(message)
